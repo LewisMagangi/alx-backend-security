@@ -140,7 +140,18 @@ RATELIMIT_USE_CACHE = 'default'  # Use default cache backend
 # Cache configuration for rate limiting
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
     }
 }
+
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Using Redis as message broker
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Store task results in Redis
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
